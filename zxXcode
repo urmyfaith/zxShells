@@ -1,0 +1,49 @@
+#!/usr/local/bin/bash
+
+declare -A xcodes
+xcodes=(
+	[Xcode7.3.1]="/Applications/Xcode.app"
+	[Xcode8Beta]="/Applications/Xcode-beta.app"
+	[currentVersion]=""
+	[zquit]=""
+	)
+
+chooseXcode()
+{
+	echo ""
+	xcode=$1
+	echo -e "\e[1;33mXcodePath=${xcode}\e[0m"
+	sudo xcode-select -s ${xcode}
+	showCurrentViersion
+}
+
+showCurrentViersion()
+{
+	echo ""
+	echo -e "\e[4;32mXcode version:\e[0m"
+	xcodebuild -version
+	echo ""
+	echo -e "\e[4;32mSwift version:\e[0m"
+	swift --version	
+}
+
+mainFunction()
+{
+	while [[ 1 ]]; do
+		echo ""
+		echo -e  "\e[1;35mchoose one of Xcode blow:\e[0m"
+		select key in ${!xcodes[*]};  
+		do  
+			break  
+		done
+		case $key in
+		  	 Xcode7.3.1 ) 		 chooseXcode ${xcodes[$key]};;
+			 Xcode8Beta ) 	     chooseXcode ${xcodes[$key]};;
+			 currentVersion)	 showCurrentViersion ;;
+			 zquit )			exit;;
+		  	*) echo "not correct input";; 
+		esac 
+	done
+}
+
+mainFunction
